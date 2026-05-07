@@ -27,42 +27,12 @@
         }
 
         h1 {
-            font-size: clamp(26px, 8vw, 60px);
+            font-size: clamp(28px, 8vw, 60px);
             color: black;
-
-            /* Better mobile-safe typing */
-            display: inline-block;
-            border-right: 3px solid black;
-
-            white-space: normal;
-            word-break: break-word;
-
-            max-width: 100%;
-
-            animation: blink 0.8s infinite;
-        }
-
-        /* Simple typing effect that doesn’t break layout */
-        h1::before {
-            content: "хорошей зарядки бабуля!";
-            display: inline-block;
-            overflow: hidden;
-            white-space: nowrap;
-            animation: typing 3.5s steps(30, end) forwards;
-            max-width: 100%;
-        }
-
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-
-        @keyframes blink {
-            50% { border-color: transparent }
+            margin-bottom: 20px;
         }
 
         audio {
-            margin-top: 30px;
             width: min(90vw, 400px);
         }
 
@@ -91,9 +61,9 @@
 
 <body>
 
-<h1></h1>
+<h1>хорошей зарядки бабуля!</h1>
 
-<audio id="player" controls autoplay></audio>
+<audio id="player" controls></audio>
 
 <div class="controls">
     <button onclick="prevSong()">⏮ Предыдущая</button>
