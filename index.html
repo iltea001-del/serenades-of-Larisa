@@ -91,7 +91,7 @@ const songs = [
     { file: "song1.mp3", name: "Claire De Lune" },
     { file: "song2.mp3", name: "Spring 1" },
     { file: "song3.mp3", name: "The Strong" },
-    { file: "song4.mp3", name: "JComptine D'un Autre Ete, L'apres-midi" },
+    { file: "song4.mp3", name: "Comptine D'un Autre Ete, L'apres-midi" },
     { file: "song5.mp3", name: "Joycelyn's Dance" },
     { file: "song6.mp3", name: "Porcelain" },
     { file: "song7.mp3", name: "Like A Tattoo" }
@@ -102,6 +102,7 @@ let currentSong = 0;
 const player = document.getElementById("player");
 const playlistDiv = document.getElementById("playlist");
 
+// render playlist UI
 function renderPlaylist() {
     playlistDiv.innerHTML = "";
 
@@ -114,31 +115,56 @@ function renderPlaylist() {
             div.classList.add("active");
         }
 
+        // click to play
+        div.onclick = () => {
+            playSong(index);
+        };
+
         playlistDiv.appendChild(div);
     });
 }
 
+// main play function (SAFE for browsers)
 function playSong(index) {
     currentSong = index;
+
     player.src = songs[index].file;
-    player.play();
+    player.load();
+
+    const playPromise = player.play();
+
+    // prevents crashes on mobile browsers
+    if (playPromise !== undefined) {
+        playPromise.catch(err => {
+            console.log("Playback blocked until user interaction:", err);
+        });
+    }
+
     renderPlaylist();
 }
 
+// next song
 function nextSong() {
     currentSong = (currentSong + 1) % songs.length;
     playSong(currentSong);
 }
 
+// previous song
 function prevSong() {
     currentSong = (currentSong - 1 + songs.length) % songs.length;
     playSong(currentSong);
 }
 
+// auto next when song ends
 player.addEventListener("ended", nextSong);
 
-playSong(0);
-</script>
+// IMPORTANT FIX: NO AUTOPLAY ON LOAD
+function init() {
+    renderPlaylist();
+    player.src = songs[0].file;
+    player.load();
+}
 
-</body>
+init();
+</script>
 </html>
