@@ -30,10 +30,15 @@
             margin-bottom: 20px;
         }
 
-        #playlist {
-            margin-top: 10px;
-            text-align: left;
+        audio {
             width: min(90vw, 400px);
+            margin-top: 20px;
+        }
+
+        #playlist {
+            margin-top: 15px;
+            width: min(90vw, 400px);
+            text-align: left;
         }
 
         .song {
@@ -49,9 +54,8 @@
             color: #FFA733;
         }
 
-        audio {
-            width: min(90vw, 400px);
-            margin-top: 20px;
+        .controls {
+            margin-top: 15px;
         }
 
         button {
@@ -77,7 +81,7 @@
 
 <div id="playlist"></div>
 
-<div>
+<div class="controls">
     <button onclick="prevSong()">⏮ Предыдущая</button>
     <button onclick="nextSong()">⏭ Следующая</button>
 </div>
@@ -86,7 +90,11 @@
 const songs = [
     { file: "song1.mp3", name: "Песня 1" },
     { file: "song2.mp3", name: "Песня 2" },
-    { file: "song3.mp3", name: "Песня 3" }
+    { file: "song3.mp3", name: "Песня 3" },
+    { file: "song4.mp3", name: "Песня 4" },
+    { file: "song5.mp3", name: "Песня 5" },
+    { file: "song6.mp3", name: "Песня 6" },
+    { file: "song7.mp3", name: "Песня 7" }
 ];
 
 let currentSong = 0;
