@@ -1,103 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Playlist</title>
+    <title>Playlist</title>
 
-<style>
-body {
-    background-color: #FFA733;
-    font-family: "Courier New", monospace;
+    <style>
+        body {
+            background-color: #FFA733;
+            font-family: "Courier New", monospace;
 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
 
-    margin: 0;
-    min-height: 100vh;
-    padding: 20px;
-    box-sizing: border-box;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
 
-    text-align: center;
-}
+            text-align: center;
+        }
 
-h1 {
-    color: black;
-    font-size: clamp(28px, 8vw, 60px);
-    margin-bottom: 20px;
-}
+        h1 {
+            color: black;
+            font-size: clamp(28px, 8vw, 60px);
+            margin-bottom: 20px;
+        }
 
-audio {
-    width: min(90vw, 400px);
-    margin-top: 20px;
-}
+        audio {
+            width: min(90vw, 400px);
+            margin-top: 20px;
+        }
 
-/* Playlist */
-#playlist {
-    margin-top: 15px;
-    width: min(90vw, 400px);
-    text-align: left;
-}
+        #playlist {
+            margin-top: 15px;
+            width: min(90vw, 400px);
+            text-align: left;
+        }
 
-/* Song card */
-.song {
-    padding: 10px;
-    margin: 8px 0;
-    background: rgba(0,0,0,0.1);
-    border-radius: 10px;
-    color: black;
-    cursor: pointer;
-    overflow: hidden;
-}
+        .song {
+            padding: 10px;
+            margin: 6px 0;
+            background: rgba(0,0,0,0.1);
+            border-radius: 8px;
+            color: black;
+            cursor: pointer;
+        }
 
-.song-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
+        .song-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
 
-.song img {
-    width: 45px;
-    height: 45px;
-    border-radius: 6px;
-    object-fit: cover;
-}
+        .song img {
+            width: 45px;
+            height: 45px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
 
-.song-details {
-    display: none;
-    margin-top: 8px;
-    font-size: 14px;
-    opacity: 0.85;
-}
+        .song-details {
+            display: none;
+            margin-top: 8px;
+            font-size: 14px;
+            opacity: 0.85;
+        }
 
-/* active song */
-.active {
-    background: black;
-    color: #FFA733;
-}
+        .active {
+            background: black;
+            color: #FFA733;
+        }
 
-/* buttons */
-.controls {
-    margin-top: 15px;
-}
+        .controls {
+            margin-top: 15px;
+        }
 
-button {
-    font-family: "Courier New", monospace;
-    font-size: 18px;
-    padding: 10px 18px;
-    margin: 5px;
+        button {
+            font-family: "Courier New", monospace;
+            font-size: 18px;
+            padding: 10px 18px;
+            margin: 5px;
 
-    background: black;
-    color: #FFA733;
+            background: black;
+            color: #FFA733;
 
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-</style>
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 
 <body>
@@ -125,14 +120,14 @@ const songs = [
     {
         file: "song2.mp3",
         name: "Spring 1",
-        artist: "Vivaldi",
+        artist: "Max Richter",
         cover: "cover2.jpg",
         info: "From The Four Seasons - Spring."
     },
     {
         file: "song3.mp3",
         name: "The Strong",
-        artist: "Unknown",
+        artist: "Ennio Morricone",
         cover: "cover3.jpg",
         info: "Powerful orchestral track."
     },
@@ -141,7 +136,28 @@ const songs = [
         name: "Comptine D'un Autre Ete",
         artist: "Yann Tiersen",
         cover: "cover4.jpg",
-        info: "From the Amélie soundtrack."
+        info: "From the movie Amélie soundtrack."
+    },
+    {
+        file: "song5.mp3",
+        name: "Joycelyn's Dance",
+        artist: "berlioz",
+        cover: "cover5.jpg",
+        info: "Soft emotional piano piece."
+    },
+    {
+        file: "song6.mp3",
+        name: "Porcelain",
+        artist: "Moby",
+        cover: "cover6.jpg",
+        info: "Electronic ambient classic."
+    },
+    {
+        file: "song7.mp3",
+        name: "Like A Tattoo",
+        artist: "Sade",
+        cover: "cover7.jpg",
+        info: "Smooth jazz-inspired track."
     }
 ];
 
@@ -150,13 +166,7 @@ let currentSong = 0;
 const player = document.getElementById("player");
 const playlistDiv = document.getElementById("playlist");
 
-/* ---------------- ERROR DEBUG ---------------- */
-player.addEventListener("error", () => {
-    console.log("Audio error:", player.error);
-    alert("Audio failed to load. Check file names, path, or format.");
-});
-
-/* ---------------- RENDER ---------------- */
+/* ---------------- RENDER PLAYLIST ---------------- */
 function renderPlaylist() {
     playlistDiv.innerHTML = "";
 
@@ -189,7 +199,7 @@ function renderPlaylist() {
             details.style.display =
                 details.style.display === "block" ? "none" : "block";
 
-            // if not clicking info area → play song
+            // play only if clicking header area
             if (!e.target.closest(".song-details")) {
                 playSong(index);
             }
@@ -199,7 +209,7 @@ function renderPlaylist() {
     });
 }
 
-/* ---------------- PLAY ---------------- */
+/* ---------------- PLAY SONG SAFELY ---------------- */
 function playSong(index) {
     currentSong = index;
 
@@ -229,6 +239,142 @@ function prevSong() {
 player.addEventListener("ended", nextSong);
 
 /* ---------------- INIT (NO AUTOPLAY) ---------------- */
+function init() {
+    renderPlaylist();
+    player.src = songs[0].file;
+    player.load();
+}
+
+init();
+</script>
+
+</body>
+</html>
+        #playlist {
+            margin-top: 15px;
+            width: min(90vw, 400px);
+            text-align: left;
+        }
+
+        .song {
+            padding: 8px;
+            margin: 5px 0;
+            background: rgba(0,0,0,0.1);
+            border-radius: 6px;
+            color: black;
+            cursor: pointer;
+        }
+
+        .active {
+            background: black;
+            color: #FFA733;
+        }
+
+        .controls {
+            margin-top: 15px;
+        }
+
+        button {
+            font-family: "Courier New", monospace;
+            font-size: 18px;
+            padding: 10px 18px;
+            margin: 5px;
+
+            background: black;
+            color: #FFA733;
+
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>хорошей зарядки бабуля!</h1>
+
+<audio id="player" controls></audio>
+
+<div id="playlist"></div>
+
+<div class="controls">
+    <button onclick="prevSong()">⏮ Предыдущая</button>
+    <button onclick="nextSong()">⏭ Следующая</button>
+</div>
+
+<script>
+const songs = [
+    { file: "song1.mp3", name: "Claire De Lune" },
+    { file: "song2.mp3", name: "Spring 1" },
+    { file: "song3.mp3", name: "The Strong" },
+    { file: "song4.mp3", name: "Comptine D'un Autre Ete, L'apres-midi" },
+    { file: "song5.mp3", name: "Porcelain" },
+    { file: "song6.mp3", name: "Joycelyn's Dance" },
+    { file: "song7.mp3", name: "Like A Tattoo" }
+];
+
+let currentSong = 0;
+
+const player = document.getElementById("player");
+const playlistDiv = document.getElementById("playlist");
+
+// show real audio errors (VERY IMPORTANT)
+player.addEventListener("error", () => {
+    console.log("Audio error code:", player.error);
+    alert("Audio failed to load. Check file name/path/format.");
+});
+
+// render playlist
+function renderPlaylist() {
+    playlistDiv.innerHTML = "";
+
+    songs.forEach((song, index) => {
+        const div = document.createElement("div");
+        div.className = "song";
+        div.innerText = song.name;
+
+        if (index === currentSong) {
+            div.classList.add("active");
+        }
+
+        div.onclick = () => playSong(index);
+
+        playlistDiv.appendChild(div);
+    });
+}
+
+// play song safely
+function playSong(index) {
+    currentSong = index;
+
+    player.pause();
+    player.src = songs[index].file;
+    player.load();
+
+    player.play().catch(err => {
+        console.log("Playback blocked or failed:", err);
+    });
+
+    renderPlaylist();
+}
+
+// next
+function nextSong() {
+    currentSong = (currentSong + 1) % songs.length;
+    playSong(currentSong);
+}
+
+// previous
+function prevSong() {
+    currentSong = (currentSong - 1 + songs.length) % songs.length;
+    playSong(currentSong);
+}
+
+// auto next
+player.addEventListener("ended", nextSong);
+
+// init (NO autoplay)
 function init() {
     renderPlaylist();
     player.src = songs[0].file;
