@@ -17,7 +17,6 @@ body{
     display:flex;
     flex-direction:column;
     align-items:center;
-
     text-align:center;
 }
 
@@ -39,20 +38,28 @@ audio{
 
 .song{
     background:rgba(0,0,0,0.10);
-    border-radius:12px;
-    margin:8px 0;
-    padding:10px;
+    border-radius:14px;
+    margin:10px 0;
+    padding:12px;
     color:black;
     cursor:pointer;
     overflow:hidden;
+
     transition:
-        transform 0.2s ease,
-        background 0.25s ease,
-        color 0.25s ease;
+        transform 0.25s ease,
+        background 0.35s ease,
+        color 0.35s ease,
+        box-shadow 0.35s ease;
 }
 
 .song:hover{
     transform:translateY(-2px);
+}
+
+.song.active{
+    background:black;
+    color:#FFA733;
+    box-shadow:0 8px 20px rgba(0,0,0,0.18);
 }
 
 .song-header{
@@ -62,11 +69,16 @@ audio{
 }
 
 .song img{
-    width:54px;
-    height:54px;
-    border-radius:8px;
+    width:56px;
+    height:56px;
+    border-radius:10px;
     object-fit:cover;
     flex-shrink:0;
+    transition:transform 0.35s ease;
+}
+
+.song.active img{
+    transform:scale(1.04);
 }
 
 .song-title{
@@ -79,28 +91,29 @@ audio{
     opacity:0.85;
 }
 
+/* smoother expanding animation */
 .song-details{
-    max-height:0;
+    display:grid;
+    grid-template-rows:0fr;
     opacity:0;
-    overflow:hidden;
-    margin-top:0;
     transition:
-        max-height 0.45s ease,
+        grid-template-rows 0.55s cubic-bezier(0.22,1,0.36,1),
         opacity 0.35s ease,
         margin-top 0.35s ease;
-    font-size:14px;
-    line-height:1.45;
+    margin-top:0;
 }
 
-.song.active{
-    background:black;
-    color:#FFA733;
+.song-details-inner{
+    overflow:hidden;
+    min-height:0;
+    font-size:14px;
+    line-height:1.5;
 }
 
 .song.active .song-details{
-    max-height:320px;
+    grid-template-rows:1fr;
     opacity:1;
-    margin-top:10px;
+    margin-top:12px;
 }
 
 .meta{
@@ -126,7 +139,7 @@ const songs = [
     artist:"Клод Дебюсси",
     year:"1905",
     cover:"cover1.jpg",
-    info:"Одна из самых известных фортепианных пьес в мире. Название переводится как «Лунный свет». Дебюсси вдохновлялся поэзией и природой. Музыка мягкая, спокойная и словно вечерняя прогулка под луной."
+    info:"Одна из самых известных фортепианных пьес в мире. Название переводится как «Лунный свет». Музыка напоминает тихий вечер, лунное сияние и спокойствие."
 },
 {
     file:"song2.mp3",
@@ -134,7 +147,7 @@ const songs = [
     artist:"Макс Рихтер",
     year:"2012",
     cover:"cover2.jpg",
-    info:"Современное переосмысление музыки Вивальди. Немецко-британский композитор Макс Рихтер взял классическую тему весны и сделал её более нежной и кинематографичной. Музыка о пробуждении природы и новой энергии."
+    info:"Современное переосмысление музыки Вивальди. Композиция о весне, пробуждении природы и свежем дыхании нового времени."
 },
 {
     file:"song3.mp3",
@@ -142,7 +155,7 @@ const songs = [
     artist:"Эннио Морриконе",
     year:"1970-е",
     cover:"cover3.jpg",
-    info:"Морриконе прославился музыкой к фильмам. Его произведения всегда очень эмоциональны и выразительны. Эта композиция передаёт силу характера, напряжение и внутреннюю стойкость."
+    info:"Музыка знаменитого кинокомпозитора. Звучание передаёт силу характера, решительность и внутреннюю стойкость."
 },
 {
     file:"song4.mp3",
@@ -150,31 +163,31 @@ const songs = [
     artist:"Ян Тьерсен",
     year:"2001",
     cover:"cover4.jpg",
-    info:"Французский композитор Ян Тьерсен стал знаменит после фильма «Амели». Эта пьеса наполнена лёгкой грустью, воспоминаниями и мечтательным настроением. Очень тёплая и душевная музыка."
+    info:"Прославилась после фильма «Амели». Лёгкая грусть, воспоминания и тёплая французская атмосфера."
 },
 {
     file:"song5.mp3",
     name:"Joycelyn's Dance",
-    artist:"berlioz",
+    artist:"Берлиоз",
     year:"2020-е",
     cover:"cover5.jpg",
-    info:"Современный артист, вдохновлённый джазом и лёгкими ритмами. Композиция звучит живо, свободно и красиво. Создаёт ощущение танца, лёгкости и хорошего настроения."
+    info:"Современная композиция с джазовым настроением. Лёгкость, движение и чувство красивого танца."
 },
 {
     file:"song6.mp3",
     name:"Porcelain",
-    artist:"Moby",
+    artist:"Моби",
     year:"1999",
     cover:"cover6.jpg",
-    info:"Одна из самых известных композиций Моби. Очень спокойная и атмосферная музыка с мягким голосом и нежным сопровождением. Часто ассоциируется с размышлениями, дорогой и внутренним покоем."
+    info:"Очень известная спокойная композиция. Часто ассоциируется с дорогой, воспоминаниями и внутренним покоем."
 },
 {
     file:"song7.mp3",
     name:"Like A Tattoo",
-    artist:"Sade",
+    artist:"Шаде",
     year:"2000",
     cover:"cover7.jpg",
-    info:"Певица Шаде известна своим мягким и глубоким голосом. Эта песня рассказывает историю воспоминаний, которые остаются в сердце навсегда — словно татуировка на душе."
+    info:"Песня о памяти и чувствах, которые остаются с человеком навсегда, словно след на сердце."
 }
 ];
 
@@ -183,12 +196,12 @@ let currentSong = 0;
 const player = document.getElementById("player");
 const playlistDiv = document.getElementById("playlist");
 
-/* ---------- ошибка загрузки ---------- */
+/* ошибка загрузки */
 player.addEventListener("error", () => {
     alert("Не удалось загрузить файл: " + player.src);
 });
 
-/* ---------- отрисовка списка ---------- */
+/* список песен */
 function renderPlaylist(){
     playlistDiv.innerHTML = "";
 
@@ -210,8 +223,10 @@ function renderPlaylist(){
             </div>
 
             <div class="song-details">
-                <div class="meta">Год: ${song.year}</div>
-                <div>${song.info}</div>
+                <div class="song-details-inner">
+                    <div class="meta">Год: ${song.year}</div>
+                    <div>${song.info}</div>
+                </div>
             </div>
         `;
 
@@ -223,7 +238,7 @@ function renderPlaylist(){
     });
 }
 
-/* ---------- воспроизведение ---------- */
+/* воспроизведение */
 function playSong(index){
     currentSong = index;
 
@@ -238,13 +253,13 @@ function playSong(index){
     renderPlaylist();
 }
 
-/* ---------- следующая песня автоматически ---------- */
+/* автопереход */
 player.addEventListener("ended", () => {
     currentSong = (currentSong + 1) % songs.length;
     playSong(currentSong);
 });
 
-/* ---------- запуск ---------- */
+/* запуск */
 function init(){
     renderPlaylist();
     player.src = songs[0].file;
