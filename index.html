@@ -47,6 +47,7 @@
             background: rgba(0,0,0,0.1);
             border-radius: 6px;
             color: black;
+            cursor: pointer;
         }
 
         .active {
@@ -69,6 +70,7 @@
 
             border: none;
             border-radius: 8px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -102,7 +104,13 @@ let currentSong = 0;
 const player = document.getElementById("player");
 const playlistDiv = document.getElementById("playlist");
 
-// render playlist UI
+// show real audio errors (VERY IMPORTANT)
+player.addEventListener("error", () => {
+    console.log("Audio error code:", player.error);
+    alert("Audio failed to load. Check file name/path/format.");
+});
+
+// render playlist
 function renderPlaylist() {
     playlistDiv.innerHTML = "";
 
@@ -115,50 +123,43 @@ function renderPlaylist() {
             div.classList.add("active");
         }
 
-        // click to play
-        div.onclick = () => {
-            playSong(index);
-        };
+        div.onclick = () => playSong(index);
 
         playlistDiv.appendChild(div);
     });
 }
 
-// main play function (SAFE for browsers)
+// play song safely
 function playSong(index) {
     currentSong = index;
 
+    player.pause();
     player.src = songs[index].file;
     player.load();
 
-    const playPromise = player.play();
-
-    // prevents crashes on mobile browsers
-    if (playPromise !== undefined) {
-        playPromise.catch(err => {
-            console.log("Playback blocked until user interaction:", err);
-        });
-    }
+    player.play().catch(err => {
+        console.log("Playback blocked or failed:", err);
+    });
 
     renderPlaylist();
 }
 
-// next song
+// next
 function nextSong() {
     currentSong = (currentSong + 1) % songs.length;
     playSong(currentSong);
 }
 
-// previous song
+// previous
 function prevSong() {
     currentSong = (currentSong - 1 + songs.length) % songs.length;
     playSong(currentSong);
 }
 
-// auto next when song ends
+// auto next
 player.addEventListener("ended", nextSong);
 
-// IMPORTANT FIX: NO AUTOPLAY ON LOAD
+// init (NO autoplay)
 function init() {
     renderPlaylist();
     player.src = songs[0].file;
@@ -167,4 +168,6 @@ function init() {
 
 init();
 </script>
+
+</body>
 </html>
