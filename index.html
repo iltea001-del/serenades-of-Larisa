@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Playlist</title>
+<title>Плейлист</title>
 
 <style>
 body{
@@ -39,17 +39,20 @@ audio{
 
 .song{
     background:rgba(0,0,0,0.10);
-    border-radius:10px;
+    border-radius:12px;
     margin:8px 0;
     padding:10px;
     color:black;
     cursor:pointer;
-    transition:0.25s ease;
     overflow:hidden;
+    transition:
+        transform 0.2s ease,
+        background 0.25s ease,
+        color 0.25s ease;
 }
 
 .song:hover{
-    transform:translateY(-1px);
+    transform:translateY(-2px);
 }
 
 .song-header{
@@ -59,8 +62,8 @@ audio{
 }
 
 .song img{
-    width:52px;
-    height:52px;
+    width:54px;
+    height:54px;
     border-radius:8px;
     object-fit:cover;
     flex-shrink:0;
@@ -68,18 +71,23 @@ audio{
 
 .song-title{
     font-weight:bold;
+    font-size:16px;
 }
 
 .song-artist{
     font-size:14px;
-    opacity:0.8;
+    opacity:0.85;
 }
 
 .song-details{
     max-height:0;
+    opacity:0;
     overflow:hidden;
-    transition:max-height 0.35s ease, margin-top 0.35s ease;
     margin-top:0;
+    transition:
+        max-height 0.45s ease,
+        opacity 0.35s ease,
+        margin-top 0.35s ease;
     font-size:14px;
     line-height:1.45;
 }
@@ -90,13 +98,14 @@ audio{
 }
 
 .song.active .song-details{
-    max-height:220px;
+    max-height:320px;
+    opacity:1;
     margin-top:10px;
 }
 
 .meta{
     font-weight:bold;
-    margin-bottom:6px;
+    margin-bottom:8px;
 }
 </style>
 </head>
@@ -113,43 +122,43 @@ audio{
 const songs = [
 {
     file:"song1.mp3",
-    name:"Claire De Lune",
-    artist:"Claude Debussy",
+    name:"Clair de Lune",
+    artist:"Клод Дебюсси",
     year:"1905",
     cover:"cover1.jpg",
-    info:"One of the most famous piano works ever written. Calm, dreamy and atmospheric."
+    info:"Одна из самых известных фортепианных пьес в мире. Название переводится как «Лунный свет». Дебюсси вдохновлялся поэзией и природой. Музыка мягкая, спокойная и словно вечерняя прогулка под луной."
 },
 {
     file:"song2.mp3",
     name:"Spring 1",
-    artist:"Max Richter",
+    artist:"Макс Рихтер",
     year:"2012",
     cover:"cover2.jpg",
-    info:"A modern re-composition inspired by Vivaldi's Four Seasons."
+    info:"Современное переосмысление музыки Вивальди. Немецко-британский композитор Макс Рихтер взял классическую тему весны и сделал её более нежной и кинематографичной. Музыка о пробуждении природы и новой энергии."
 },
 {
     file:"song3.mp3",
     name:"The Strong",
-    artist:"Ennio Morricone",
-    year:"1970s",
+    artist:"Эннио Морриконе",
+    year:"1970-е",
     cover:"cover3.jpg",
-    info:"Cinematic orchestral writing with emotional power and tension."
+    info:"Морриконе прославился музыкой к фильмам. Его произведения всегда очень эмоциональны и выразительны. Эта композиция передаёт силу характера, напряжение и внутреннюю стойкость."
 },
 {
     file:"song4.mp3",
-    name:"Comptine D'un Autre Ete",
-    artist:"Yann Tiersen",
+    name:"Comptine d’un autre été",
+    artist:"Ян Тьерсен",
     year:"2001",
     cover:"cover4.jpg",
-    info:"Minimalist piano classic made famous by the film Amélie."
+    info:"Французский композитор Ян Тьерсен стал знаменит после фильма «Амели». Эта пьеса наполнена лёгкой грустью, воспоминаниями и мечтательным настроением. Очень тёплая и душевная музыка."
 },
 {
     file:"song5.mp3",
     name:"Joycelyn's Dance",
     artist:"berlioz",
-    year:"2020s",
+    year:"2020-е",
     cover:"cover5.jpg",
-    info:"Modern jazz-inspired groove with smooth rhythm and elegant texture."
+    info:"Современный артист, вдохновлённый джазом и лёгкими ритмами. Композиция звучит живо, свободно и красиво. Создаёт ощущение танца, лёгкости и хорошего настроения."
 },
 {
     file:"song6.mp3",
@@ -157,7 +166,7 @@ const songs = [
     artist:"Moby",
     year:"1999",
     cover:"cover6.jpg",
-    info:"Iconic downtempo electronic track from the album Play."
+    info:"Одна из самых известных композиций Моби. Очень спокойная и атмосферная музыка с мягким голосом и нежным сопровождением. Часто ассоциируется с размышлениями, дорогой и внутренним покоем."
 },
 {
     file:"song7.mp3",
@@ -165,7 +174,7 @@ const songs = [
     artist:"Sade",
     year:"2000",
     cover:"cover7.jpg",
-    info:"Elegant, intimate and emotional vocal performance."
+    info:"Певица Шаде известна своим мягким и глубоким голосом. Эта песня рассказывает историю воспоминаний, которые остаются в сердце навсегда — словно татуировка на душе."
 }
 ];
 
@@ -174,13 +183,13 @@ let currentSong = 0;
 const player = document.getElementById("player");
 const playlistDiv = document.getElementById("playlist");
 
-/* ---------- ERROR HANDLER ---------- */
+/* ---------- ошибка загрузки ---------- */
 player.addEventListener("error", () => {
-    alert("Failed to load: " + player.src);
+    alert("Не удалось загрузить файл: " + player.src);
 });
 
-/* ---------- RENDER ---------- */
-function renderPlaylist() {
+/* ---------- отрисовка списка ---------- */
+function renderPlaylist(){
     playlistDiv.innerHTML = "";
 
     songs.forEach((song, index) => {
@@ -193,7 +202,7 @@ function renderPlaylist() {
 
         card.innerHTML = `
             <div class="song-header">
-                <img src="${song.cover}" alt="cover">
+                <img src="${song.cover}" alt="Обложка">
                 <div>
                     <div class="song-title">${song.name}</div>
                     <div class="song-artist">${song.artist}</div>
@@ -201,7 +210,7 @@ function renderPlaylist() {
             </div>
 
             <div class="song-details">
-                <div class="meta">Year: ${song.year}</div>
+                <div class="meta">Год: ${song.year}</div>
                 <div>${song.info}</div>
             </div>
         `;
@@ -214,7 +223,7 @@ function renderPlaylist() {
     });
 }
 
-/* ---------- PLAY ---------- */
+/* ---------- воспроизведение ---------- */
 function playSong(index){
     currentSong = index;
 
@@ -229,13 +238,13 @@ function playSong(index){
     renderPlaylist();
 }
 
-/* ---------- AUTO NEXT ---------- */
+/* ---------- следующая песня автоматически ---------- */
 player.addEventListener("ended", () => {
     currentSong = (currentSong + 1) % songs.length;
     playSong(currentSong);
 });
 
-/* ---------- INIT ---------- */
+/* ---------- запуск ---------- */
 function init(){
     renderPlaylist();
     player.src = songs[0].file;
