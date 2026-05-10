@@ -1,3 +1,137 @@
+```html
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Плейлист</title>
+
+<style>
+body{
+    background:#FFA733;
+    font-family:"Courier New", monospace;
+    margin:0;
+    min-height:100vh;
+    padding:20px;
+    box-sizing:border-box;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
+
+h1{
+    color:black;
+    font-size:clamp(28px,8vw,60px);
+    margin-bottom:20px;
+}
+
+audio{
+    width:min(90vw,420px);
+    margin-bottom:15px;
+}
+
+#playlist{
+    width:min(90vw,420px);
+    text-align:left;
+}
+
+.song{
+    background:rgba(0,0,0,0.10);
+    border-radius:14px;
+    margin:10px 0;
+    padding:12px;
+    color:black;
+    cursor:pointer;
+    overflow:hidden;
+
+    transition:
+        transform 0.25s ease,
+        background 0.35s ease,
+        color 0.35s ease,
+        box-shadow 0.35s ease;
+}
+
+.song:hover{
+    transform:translateY(-2px);
+}
+
+.song.active{
+    background:black;
+    color:#FFA733;
+    box-shadow:0 8px 20px rgba(0,0,0,0.18);
+}
+
+.song-header{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.song img{
+    width:56px;
+    height:56px;
+    border-radius:10px;
+    object-fit:cover;
+    flex-shrink:0;
+    transition:transform 0.35s ease;
+}
+
+.song.active img{
+    transform:scale(1.04);
+}
+
+.song-title{
+    font-weight:bold;
+    font-size:16px;
+}
+
+.song-artist{
+    font-size:14px;
+    opacity:0.85;
+}
+
+.song-details{
+    display:grid;
+    grid-template-rows:0fr;
+    opacity:0;
+    transition:
+        grid-template-rows 0.55s cubic-bezier(0.22,1,0.36,1),
+        opacity 0.35s ease,
+        margin-top 0.35s ease;
+    margin-top:0;
+}
+
+.song-details-inner{
+    overflow:hidden;
+    min-height:0;
+    font-size:14px;
+    line-height:1.5;
+}
+
+.song.active .song-details{
+    grid-template-rows:1fr;
+    opacity:1;
+    margin-top:12px;
+}
+
+.meta{
+    font-weight:bold;
+    margin-bottom:8px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>хорошей зарядки бабуля!</h1>
+
+<audio id="player" controls></audio>
+
+<div id="playlist"></div>
+
+<script>
 const songs = [
 {
     file:"song1.mp3",
@@ -5,7 +139,7 @@ const songs = [
     artist:"Клод Дебюсси",
     year:"1905",
     cover:"cover1.jpg",
-    info:"Одна из самых известных фортепианных пьес в мире. Название переводится как «Лунный свет». Музыка напоминает тихий вечер, лунное сияние и спокойствие."
+    info:"Одна из самых известных фортепианных пьес. Спокойная музыка о лунном свете и тишине."
 },
 {
     file:"song2.mp3",
@@ -13,7 +147,7 @@ const songs = [
     artist:"Макс Рихтер",
     year:"2012",
     cover:"cover2.jpg",
-    info:"Современное переосмысление музыки Вивальди. Композиция о весне, пробуждении природы и свежем дыхании нового времени."
+    info:"Современная версия музыки Вивальди. О весне, пробуждении природы и новом начале."
 },
 {
     file:"song3.mp3",
@@ -21,7 +155,7 @@ const songs = [
     artist:"Эннио Морриконе",
     year:"1970-е",
     cover:"cover3.jpg",
-    info:"Музыка знаменитого кинокомпозитора. Звучание передаёт силу характера, решительность и внутреннюю стойкость."
+    info:"Сильная и эмоциональная музыка великого композитора кино."
 },
 {
     file:"song4.mp3",
@@ -29,7 +163,7 @@ const songs = [
     artist:"Ян Тьерсен",
     year:"2001",
     cover:"cover4.jpg",
-    info:"Прославилась после фильма «Амели». Лёгкая грусть, воспоминания и тёплая французская атмосфера."
+    info:"Нежная мелодия из фильма «Амели». О воспоминаниях и мечтах."
 },
 {
     file:"song5.mp3",
@@ -37,7 +171,7 @@ const songs = [
     artist:"Берлиоз",
     year:"2020-е",
     cover:"cover5.jpg",
-    info:"Современная композиция с джазовым настроением. Лёгкость, движение и чувство красивого танца."
+    info:"Лёгкая современная композиция с красивым ритмом."
 },
 {
     file:"song6.mp3",
@@ -45,7 +179,7 @@ const songs = [
     artist:"Моби",
     year:"1999",
     cover:"cover6.jpg",
-    info:"Очень известная спокойная композиция. Часто ассоциируется с дорогой, воспоминаниями и внутренним покоем."
+    info:"Спокойная атмосферная музыка о размышлениях и покое."
 },
 {
     file:"song7.mp3",
@@ -53,7 +187,7 @@ const songs = [
     artist:"Шаде",
     year:"2000",
     cover:"cover7.jpg",
-    info:"Песня о памяти и чувствах, которые остаются с человеком навсегда, словно след на сердце."
+    info:"Песня о памяти и чувствах, которые остаются навсегда."
 },
 {
     file:"song8.mp3",
@@ -61,7 +195,7 @@ const songs = [
     artist:"Эйр",
     year:"1998",
     cover:"cover8.jpg",
-    info:"Французский дуэт Air известен мягким электронным звучанием. Эта композиция спокойная, романтичная и словно наполнена вечерним воздухом."
+    info:"Мягкая французская музыка о любви, тепле и близости."
 },
 {
     file:"song9.mp3",
@@ -69,7 +203,7 @@ const songs = [
     artist:"Стинг",
     year:"1993",
     cover:"cover9.jpg",
-    info:"Одна из самых известных песен Стинга. Текст размышляет о жизни, судьбе и поиске внутренней правды."
+    info:"Песня о жизни, судьбе и поиске истины."
 },
 {
     file:"song10.mp3",
@@ -77,7 +211,7 @@ const songs = [
     artist:"Леонард Коэн",
     year:"1967",
     cover:"cover10.jpg",
-    info:"Классическая песня Леонарда Коэна. Нежная и глубокая история о встрече, красоте и духовной близости."
+    info:"Нежная и глубокая история о встрече и душевной связи."
 },
 {
     file:"song11.mp3",
@@ -85,7 +219,7 @@ const songs = [
     artist:"Куин",
     year:"1982",
     cover:"cover11.jpg",
-    info:"Песня группы Queen, посвящённая памяти Джона Леннона. Очень искренняя и трогательная композиция."
+    info:"Песня памяти Джона Леннона. Искренняя и трогательная."
 },
 {
     file:"song12.mp3",
@@ -93,7 +227,7 @@ const songs = [
     artist:"Битлз",
     year:"1969",
     cover:"cover12.jpg",
-    info:"Одна из самых светлых и радостных песен The Beatles. О солнце, надежде и начале хорошего времени."
+    info:"Светлая и радостная песня о солнце и надежде."
 },
 {
     file:"song13.mp3",
@@ -101,6 +235,87 @@ const songs = [
     artist:"Жоржи Бен Жор",
     year:"1963",
     cover:"cover13.jpg",
-    info:"Бразильская классика с тёплым ритмом самбы. Песня наполнена солнечным настроением и лёгкостью жизни."
+    info:"Тёплая бразильская музыка с солнечным настроением."
 }
 ];
+
+let currentSong = 0;
+
+const player = document.getElementById("player");
+const playlistDiv = document.getElementById("playlist");
+
+player.addEventListener("error", () => {
+    alert("Не удалось загрузить файл: " + player.src);
+});
+
+function renderPlaylist(){
+    playlistDiv.innerHTML = "";
+
+    songs.forEach((song,index) => {
+        const card = document.createElement("div");
+        card.className = "song";
+
+        if(index === currentSong){
+            card.classList.add("active");
+        }
+
+        card.innerHTML = `
+            <div class="song-header">
+                <img src="${song.cover}" alt="Обложка"
+                     onerror="this.src='cover1.jpg'">
+                <div>
+                    <div class="song-title">${song.name}</div>
+                    <div class="song-artist">${song.artist}</div>
+                </div>
+            </div>
+
+            <div class="song-details">
+                <div class="song-details-inner">
+                    <div class="meta">Год: ${song.year}</div>
+                    <div>${song.info}</div>
+                </div>
+            </div>
+        `;
+
+        card.addEventListener("click", () => {
+            playSong(index);
+        });
+
+        playlistDiv.appendChild(card);
+    });
+}
+
+function playSong(index){
+    currentSong = index;
+
+    player.pause();
+    player.removeAttribute("src");
+    player.load();
+
+    player.src = songs[index].file;
+    player.load();
+
+    player.play().catch(err => {
+        console.log(err);
+    });
+
+    renderPlaylist();
+}
+
+player.addEventListener("ended", () => {
+    currentSong = (currentSong + 1) % songs.length;
+    playSong(currentSong);
+});
+
+function init(){
+    renderPlaylist();
+    player.src = songs[0].file;
+    player.load();
+}
+
+init();
+</script>
+
+</body>
+</html>
+```
